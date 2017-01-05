@@ -7,27 +7,37 @@ from utils import print_message
 
 
 class Bot(IRC.Bot):
-    def __init__(self, parent, sock):  # , server, bot_name, channel, port):
+    def __init__(self, parent, server, username, channel):  # , server, bot_name, channel, port):
         # if channel == "#root-me":
         #    self.error = "BANNED CHANNEL"
         #    exit(0)
-        IRC.Bot.__init__(self, parent)
+        IRC.Bot.__init__(self, parent, channel, username, server)
         self.cmds = commands_init(self)
-        self.sock = sock
 
     def end(self):
-        self.sock.send("QUIT : va faire une revision\r\n")
-        self.sock.close()
+        """
+        end the bot
+        :return: Nothing what did you expect
+        """
+        self.reply("va faire une revision", "QUIT")
         exit(0)
 
     def main(self):
+        """
+        main loop for the bot
+        :return: Nothing what did you expect
+        """
         message = self.queue.get()
         if not command_loop(message, self.sock, self.cmds, self.parent):
             print_message("[" + message.msg_type + "] USER: " + message.pseudo + " send: " + message.content)
 
 
-def commands_init(bot):
-    cmds = []
+def commands_init():
+    """
+    initialisation of the commands supported by the bot
+    :return: Nothing what did you expect
+    """
+    cmds = list()
     cmds.append(Command(["!transfert"], action.create_transferer, "TRANSFERT",
                         args=[("server", "require"), ("#channel", "require"), ("public/publique", "optional")]))
     return cmds

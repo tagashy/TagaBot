@@ -4,6 +4,10 @@ import time
 
 
 class User:
+    """
+    IRC User class
+    """
+
     def __init__(self, username, channel="UNKNOWN", server="UNKNOWN", admin=False):
         self.username = username
         self.server = server
@@ -18,6 +22,13 @@ class User:
         self.sexe = "THIRD"
 
     def update_last_seen(self, server="UNKNOWN", channel="UNKNOWN", admin=False):
+        """
+        update the last time a user has been seeb
+        :param server: the server where the user has been seen
+        :param channel: the channel where the user has been seen
+        :param admin: is the user admin of the channel
+        :return: Nothing what did you expect
+        """
         self.lastSeen = time.strftime("%d/%m/%y %H:%M:%S")
         self.digiTime = time.time()
         self.server = server
@@ -31,21 +42,41 @@ class User:
         return ret
 
     def info(self):
+        """
+        retrieve personal information about user
+        :return: personal information about user (str/unicode)
+        """
         return "{} is {} years old, {}'s name is {} and is sexe is {}".format(self.username, self.age, self.username,
                                                                               self.realname, self.age)
 
 
 class Users:
+    """
+    IRC list of users
+    """
+
     def __init__(self):
         self.__users = []
 
     def user_exist(self, pseudo):
+        """
+        check if a user exist in the list
+        :param pseudo: name of the user
+        :return: True/False
+        """
         for u in self.__users:
             if pseudo == u.username:
-                return 1
-        return 0
+                return True
+        return False
 
     def add_user(self, user, server="UNKNOWN", channel="UNKNOWN"):
+        """
+        add user to the list
+        :param user: either the pseudo or a user object
+        :param server: the server where user has been seen
+        :param channel: the channel where user has been seen
+        :return: 1(success)/0(exist)/-1(error)
+        """
         admin = False
         if isinstance(user, User):
             if user.username[0:1] == "@":
@@ -73,6 +104,11 @@ class Users:
             return 1
 
     def deactivate_user(self, user):
+        """
+        deactivate user in user list
+        :param user: either the pseudo or a user object
+        :return: 1(success)/0(exist)/-1(error)
+        """
         if isinstance(user, User):
             u = self.get_user(user.username)
         elif isinstance(user, str) or isinstance(user, unicode):
@@ -86,6 +122,11 @@ class Users:
             return 0
 
     def remove_user(self, user):
+        """
+        remove user from user list
+        :param user: either the pseudo or a user object
+        :return: 1(success)/0(exist)/-1(error)
+        """
         if isinstance(user, User):
             u = self.get_user(user.username)
         elif isinstance(user, str) or isinstance(user, unicode):
@@ -99,6 +140,14 @@ class Users:
             return 0
 
     def update_user(self, user, server="UNKNOWN", channel="UNKNOWN", alcolemie=False):
+        """
+        deactivate user in user list
+        :param user: either the pseudo or a user object
+        :param server: the server where user has been seen
+        :param channel: the channel where user has been seen
+        :param alcolemie: not used but for trolling
+        :return: 1(success)/0(exist)/-1(error)
+        """
         if isinstance(user, User):
             if user.username[:1] == "@":
                 user = user[1:]
@@ -124,6 +173,11 @@ class Users:
             return 0
 
     def get_user(self, user):
+        """
+        get user object direct reference (deprecated)
+        :param user: username (str/unicode)
+        :return: user object/-1(error)
+        """
         if self.user_exist(user):
             for u in self.__users:
                 if user == u.username:
