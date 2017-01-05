@@ -33,7 +33,7 @@ class Transferrer(IRC.Bot):
 
     def user_privmsg(self, message):
         self.update_user_last_seen(message.pseudo)
-        send_res = "Private message from user {}>{}".format(
+        send_res = "Private Message from user {}>{}".format(
             message.pseudo[0:1] + self.invisible_cara + message.pseudo[1:],
             message.content)
         self.send_message(send_res)

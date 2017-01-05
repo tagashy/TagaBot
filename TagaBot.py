@@ -12,7 +12,7 @@ class Bot(IRC.Bot):
         #    self.error = "BANNED CHANNEL"
         #    exit(0)
         IRC.Bot.__init__(self, parent, channel, username, server)
-        self.cmds = commands_init(self)
+        self.cmds = commands_init()
 
     def end(self):
         """
@@ -28,8 +28,11 @@ class Bot(IRC.Bot):
         :return: Nothing what did you expect
         """
         message = self.queue.get()
-        if not command_loop(message, self.sock, self.cmds, self.parent):
+        reply=command_loop(message, self.cmds, self)
+        if not reply:
             print_message("[" + message.msg_type + "] USER: " + message.pseudo + " send: " + message.content)
+        else:
+            self.reply(reply.content,reply.msg_type)
 
 
 def commands_init():

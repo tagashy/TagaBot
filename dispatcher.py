@@ -9,8 +9,8 @@ from IRC import Bot
 
 class Dispatcher(mythread.Thread):
     """
-    Dispatcher of message class.
-    It will take msg from is queue and dispatch them to the correct elems if the message match the pattern
+    Dispatcher of Message class.
+    It will take msg from is queue and dispatch them to the correct elems if the Message match the pattern
     """
 
     def __init__(self):
@@ -20,9 +20,9 @@ class Dispatcher(mythread.Thread):
 
     def append(self, queue, message_form):
         """
-        add of new queue to dispatch a message
-        :param queue: queue to store message if they match message_form
-        :param message_form: pattern to match to put the message to the queue
+        add of new queue to dispatch a Message
+        :param queue: queue to store Message if they match message_form
+        :param message_form: pattern to match to put the Message to the queue
         :return: Nothing what did you expect
         """
         if isinstance(queue, Bot):
@@ -35,7 +35,7 @@ class Dispatcher(mythread.Thread):
         :return: Nothing what did you expect
         """
         message = self.queue.get()
-        if isinstance(message, message_parsing.message):
+        if isinstance(message, message_parsing.Message):
             for el in self.elems:
                 param = el[0]
                 if param.pseudo is None or param.pseudo == message.pseudo:
@@ -45,7 +45,7 @@ class Dispatcher(mythread.Thread):
                                 if param.content is None or param.content in message.content:
                                     if param.target is None or param.target == message.target:
                                         if param.server is None or param.server == "NOT_IMPLEMENTED_YET" or param.server == message.server:
-                                            # print "[D] good message"
+                                            # print "[D] good Message"
                                             el[1].put(message)
 
     def remove(self, target):

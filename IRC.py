@@ -8,8 +8,8 @@ import mythread
 
 class Socket(mythread.Thread):
     """
-    IRC socket to grab message
-    it is a wrapper from classical socket to keep IRC connection alive and transfer message to his dispatcher
+    IRC socket to grab Message
+    it is a wrapper from classical socket to keep IRC connection alive and transfer Message to his dispatcher
     """
     def __init__(self, dispatcher, sock, username, server, channel):
         mythread.Thread.__init__(self)
@@ -28,7 +28,6 @@ class Socket(mythread.Thread):
             if msg.startswith("PING"):
                 self.sock.send(msg.replace("PING", "PONG") + "\r\n")
             elif msg != "":
-                print "[D] {}".format(msg)
                 message = message_parsing.parse(msg)
                 message.server = self.server
                 self.dispatcher.queue.put(message)
@@ -36,7 +35,7 @@ class Socket(mythread.Thread):
     def send(self, message):
         """
         send method of socket
-        :param message: message to send
+        :param message: Message to send
         :return: Nothing what did you expect
         """
         self.sock.send(message.encode('utf-8', errors="replace"))
@@ -67,9 +66,9 @@ class Bot(mythread.Thread):
 
     def reply(self, content, msg_type, username=None, target=None, server=None):
         """
-        send a message
-        :param content: the content of the message
-        :param msg_type: the type of message
+        send a Message
+        :param content: the content of the Message
+        :param msg_type: the type of Message
         :param username: the username of the socket
         :param target: the channel or user to reply to
         :param server: the server to reply to
@@ -86,7 +85,7 @@ class Bot(mythread.Thread):
     def update_user_last_seen(self, message=None, pseudo=None, server=None, channel=None):
         """
         update the last time a user has been seen
-        :param message: the message received by IRC sock (or stuff who countain at least pseudo, server and target attribute) OVERIDE OTHER PARAMS !!!!!
+        :param message: the Message received by IRC sock (or stuff who countain at least pseudo, server and target attribute) OVERIDE OTHER PARAMS !!!!!
         :param pseudo: the pseudo of the user
         :param server: the server of the user
         :param channel: the channel of the user
@@ -102,7 +101,7 @@ class Bot(mythread.Thread):
     def add_user(self, message=None, pseudo=None, server=None, channel=None):
         """
         add a user to user list
-        :param message:the message received by IRC sock (or stuff who countain at least pseudo, server and target attribute) OVERIDE OTHER PARAMS !!!!!
+        :param message:the Message received by IRC sock (or stuff who countain at least pseudo, server and target attribute) OVERIDE OTHER PARAMS !!!!!
         :param pseudo: the pseudo of the user
         :param server: the server of the user
         :param channel: the channel of the user
@@ -122,7 +121,7 @@ class Bot(mythread.Thread):
 
     def main(self):
         """
-        main loop to allow callback on specific type of message
+        main loop to allow callback on specific type of Message
         :return: Nothing what did you expect
         """
         message = self.queue.get()

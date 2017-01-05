@@ -8,7 +8,10 @@ message_regex = re.compile(
     re.VERBOSE)
 
 
-class message:
+class Message:
+    """
+    a Message represnetation of IRC Message
+    """
     def __init__(self, pseudo=None, user_account=None, ip=None, msg_type=None, content=None, target=None, server=None):
         self.pseudo = pseudo
         self.user_account = user_account
@@ -20,6 +23,10 @@ class message:
         self.time = time.time()
 
     def construct_message(self):
+        """
+        construct a real IRC Message
+        :return: IRC byte sequence Message
+        """
         msg_type = self.msg_type
         if msg_type == "PUBMSG":
             msg_type = "PRIVMSG"
@@ -29,6 +36,10 @@ class message:
         return ret + "\r\n"
 
     def get_time(self):
+        """
+        time of the Message
+        :return: the time were Message was created
+        """
         return time.strftime("%d/%m/%y %M:%H:%S", self.time)
 
     def __str__(self):
@@ -70,6 +81,11 @@ class message:
 
 
 def parse(msg):
+    """
+    parse socket Message to IRC Message
+    :param msg: the socket Message
+    :return: IRC Message
+    """
     msg = msg.replace("\r", "").replace("\n", "").replace("\b", "")
     pseudo = user_account = ip = msg_type = content = target = ""
     msg_parsed = message_regex.search(msg)
@@ -84,4 +100,4 @@ def parse(msg):
             content = data[5]
         if target.startswith("#") and msg_type == "PRIVMSG":
             msg_type = "PUBMSG"
-    return message(pseudo, user_account, ip, msg_type, content, target)
+    return Message(pseudo, user_account, ip, msg_type, content, target)
