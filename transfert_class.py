@@ -1,16 +1,17 @@
 # coding: utf8
 from __future__ import unicode_literals
 
-import IRC
-from utils import send_private_message
+import random
 
+import IRC
+import message_parsing
 
 class Transferrer(IRC.Bot):
     """
     Transfer class, it will transfer all message from a channel to another
     """
 
-    def __init__(self, parent, target,bot_name,server_to_reply, couleur=2):
+    def __init__(self, parent, target, bot_name, server_to_reply, couleur=2):
         """
         initialisation of Transfer class
 
@@ -20,21 +21,9 @@ class Transferrer(IRC.Bot):
         :param server_to_reply: the server to reply to
         :param couleur: the color of the message to write
         """
-        IRC.Bot.__init__(self, parent,target,bot_name,server_to_reply)
+        IRC.Bot.__init__(self, parent, target, bot_name, server_to_reply)
         self.couleur = couleur
         self.invisible_cara = u"\u200B"
-
-    def send_message(self, message):
-        """
-        send a message (obsolete)
-
-        :param message: the content to send
-        :return:
-        """
-        if self.pseudo is not None:
-            send_private_message(chr(3) + str(self.couleur) + message, self.pseudo, self.send_sock)
-        else:
-            send_private_message(chr(3) + str(self.couleur) + message, self.original_chan, self.send_sock)
 
     def user_join(self, message):
         """
@@ -60,7 +49,7 @@ class Transferrer(IRC.Bot):
         send_res = "Private Message from user {}>{}".format(
             message.pseudo[0:1] + self.invisible_cara + message.pseudo[1:],
             message.content)
-        #self.send_message(send_res)
+        # self.send_message(send_res)
         self.reply(send_res, "PRIVMSG")
 
     def user_pubmsg(self, message):
@@ -73,8 +62,8 @@ class Transferrer(IRC.Bot):
         self.update_user_last_seen(message)
         send_res = "{} : {}>{}".format(message.target, message.pseudo[0:1] + self.invisible_cara + message.pseudo[1:],
                                        message.content)
-        #self.send_message(send_res)
-        self.reply(send_res,"PRIVMSG")
+        # self.send_message(send_res)
+        self.reply(send_res, "PRIVMSG")
 
     def user_quit(self, message):
         """
@@ -129,3 +118,45 @@ class Transferrer(IRC.Bot):
                                                                           message.pseudo)
         # self.send_message(send_res)
         self.reply(send_res, "PRIVMSG")
+
+
+def create_transferer(message, bot):
+    """
+    create a transfer
+
+    :param message: commands line (message_parsing.Message)
+    :param bot: the bot
+    :return:
+    """
+    # geting_param
+    num_generator = random.Random()
+    num_generator.seed()
+    param = message.content.split()
+    if len(param) >= 3:
+        addr = param[1]
+        server_addr = addr.split(":")
+        if len(server_addr) == 1:
+            server_addr = addr
+            port = 6667
+        elif len(server_addr) == 2:
+            port = int(server_addr[1])
+            server_addr = server_addr[0]
+        else:
+            if message.msg_type == "PRIVMSG":
+                bot.reply("too much :", message.msg_type, target=message.pseudo)
+            else:
+                bot.reply("too much :", message.msg_type)
+            # print_message("too much :", message.msg_type, message.pseudo, message.target)
+            return
+        channel = param[2]
+        # check existence:
+        # create bot
+        # transfert_class.Transferrer(bot.dispatcher,)
+        reg = message_parsing.Message(server=server_addr, target=channel)
+        bot_name = "Guest" + str(num_generator.randint(10000, 99999))
+        if message.msg_type == "PRIVMSG":
+            tr = Transferrer(bot.parent, bot.target, bot_name, bot.server)
+        else:
+            tr = Transferrer(bot.parent, bot.target, bot_name, bot.server)
+        bot.parent.add_bot(reg, tr, bot_name, server_addr, channel)
+        bot.parent.add_bot_listener(message_parsing.Message(target=bot_name), tr)

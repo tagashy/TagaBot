@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 import IRC
-import action
+import transfert_class
 from action import Command, command_loop
 from utils import print_message
 
@@ -34,8 +34,7 @@ class Bot(IRC.Bot):
         reply=command_loop(message, self.cmds, self)
         if not reply:
             print_message("[" + message.msg_type + "] USER: " + message.pseudo + " send: " + message.content)
-        else:
-            self.reply(reply.content,reply.msg_type)
+
 
 
 def commands_init():
@@ -45,6 +44,6 @@ def commands_init():
     :return: Nothing what did you expect
     """
     cmds = list()
-    cmds.append(Command(["!transfert"], action.create_transferer, "TRANSFERT",
+    cmds.append(Command(["!transfert"], transfert_class.create_transferer, "TRANSFERT",
                         args=[("server", "require"), ("#channel", "require"), ("public/publique", "optional")]))
     return cmds

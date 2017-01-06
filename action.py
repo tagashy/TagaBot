@@ -66,39 +66,6 @@ def command_loop(message, cmds, bot):
                     return 1
 
 
-def create_transferer(message, bot):
-    """
-    create a transfer
-
-    :param message: commands line (message_parsing.Message)
-    :param bot: the bot
-    :return:
-    """
-    # geting_param
-    ret = message_parsing.Message()
-    num_genrator = random.Random()
-    num_genrator.seed()
-    param = message.content.split()
-    if len(param) >= 3:
-        addr = param[1]
-        server_addr = addr.split(":")
-        if len(server_addr) == 1:
-            server_addr = addr
-            port = 6667
-        elif len(server_addr) == 2:
-            port = int(server_addr[1])
-            server_addr = server_addr[0]
-        else:
-            print_message("too much :", message.msg_type, message.pseudo, message.target)
-            return
-        channel = param[2]
-        # check existence:
-        # create bot
-        # transfert_class.Transferrer(bot.dispatcher,)
-        bot.add_bot(message_parsing.Message(server=server_addr, target=channel), transfert_class.Transferrer,
-                    server=server_addr, channel=channel,
-                    bot_name="user_" + str(num_genrator.randint(1000, 1000 * 1000)), sock=sock)
-
 
 def help_cmd(cmd, msg_type, pseudo, channel, bot):
     """
@@ -119,7 +86,7 @@ def help_cmd(cmd, msg_type, pseudo, channel, bot):
         for arg in cmd.args:
             ret += " <{}|{}>".format(arg[0], arg[1])
     if cmd.help:
-        bot.reply(content=ret, msg_type=msg_type, target=channel, pseudo=pseudo)
+        bot.reply(content=ret, msg_type=msg_type, target=channel, username=pseudo)
 
 
 def help_cmds(cmds, msg_type, pseudo, channel, bot):
@@ -142,4 +109,4 @@ def help_cmds(cmds, msg_type, pseudo, channel, bot):
                 for key in cmd.keyword:
                     if "?" not in key:
                         ret += " " + key
-    bot.reply(content=ret, msg_type=msg_type, target=channel, pseudo=pseudo)
+    bot.reply(content=ret, msg_type=msg_type, target=channel, username=pseudo)

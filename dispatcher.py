@@ -38,6 +38,7 @@ class Dispatcher(mythread.Thread):
         :return: Nothing what did you expect
         """
         message = self.queue.get()
+        print ("[D] received {}".format(message))
         if isinstance(message, message_parsing.Message):
             for el in self.elems:
                 param = el[0]

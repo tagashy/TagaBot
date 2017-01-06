@@ -34,11 +34,18 @@ class Replyer(mythread.Thread):
         :return: Nothing what did you expect
         """
         reply = self.queue.get()
+        print ("[D] replyer message {}".format(reply))
+        print ("[D] replyer message {}".format(reply.construct_message()))
         if isinstance(reply, message_parsing.Message):
             for sock in self.socks:
                 if reply.pseudo == sock.username:
                     if reply.server == sock.server:
                         if not reply.target.startswith("#"):
                             sock.send(reply.construct_message())
+                            return
                         elif reply.target == sock.channel:
                             sock.send(reply.construct_message())
+                            return
+            print "NO MATCH !!!"
+            for sock in self.socks:
+                print sock

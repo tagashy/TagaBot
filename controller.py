@@ -116,7 +116,6 @@ class Controller(mythread.Thread):
         """
         create a Message object and send it
 
-
         :param username: the username of the bot to send Message
         :param msg_type: the Message type
         :param content: the content of the Message
