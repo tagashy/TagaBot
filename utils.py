@@ -17,7 +17,8 @@ class ConnectionError(Exception):
 
 def clean(string):
     """
-    clean a string from potentially anoying character
+    clean a string from potentially annoying character
+
     :param string: the string to remove character
     :return: the string whithout those caracter character
     """
@@ -28,6 +29,7 @@ def clean(string):
 def create_irc_socket(addr, bot_name, channel, users_list, port=6667):
     """
     create a socket and authenticate to server
+
     :param addr: address of the server to connect to
     :param bot_name: the name of the user to authenticate with
     :param channel: the channel to join
@@ -70,6 +72,7 @@ def create_irc_socket(addr, bot_name, channel, users_list, port=6667):
 def print_message(message, msg_type="STDIN", sock=None, pseudo=None, channel=None):
     """
     old method to send message on IRC server or STDIN
+
     :param message: the content to write
     :param msg_type: the type of the message (STDIN/PUBMSG/PRIVMSG)
     :param sock: the socket to send message over
@@ -88,6 +91,7 @@ def print_message(message, msg_type="STDIN", sock=None, pseudo=None, channel=Non
 def send_private_message(message, pseudo, sock):
     """
     send a private message to a user/channel
+
     :param message: the content to wrtie
     :param pseudo: the pseudo of the user/channel
     :param sock: the socket to send message over
@@ -99,6 +103,7 @@ def send_private_message(message, pseudo, sock):
 def parse_name_list(msg, name_list_reg, channel="UNKNOWN", server="UNKNOWN"):
     """
     convert a 351 message (user connected to channel) to a user list
+
     :param msg: the message received (str)
     :param name_list_reg: the regex to use
     :param channel: the channel of the server
@@ -119,6 +124,7 @@ def parse_name_list(msg, name_list_reg, channel="UNKNOWN", server="UNKNOWN"):
 def cut_at_cara(string, c):
     """
     cut a string at a character and return the content without all character previous to this one
+
     :param string: the string to cut
     :param c: the character to cut at
     :return: string whitout the part previous to he character
@@ -133,6 +139,7 @@ def cut_at_cara(string, c):
 def convert_html_to_uni(text):
     """
     convert html character to their unicode version
+
     :param text: the text to convert
     :return: the text converted
     """
@@ -163,6 +170,7 @@ def convert_html_to_uni(text):
 def parse_html_balise(balise, text):
     """
     get the text of the html-like balise (XML should also work but not tested)
+
     :param balise: the balise to get
     :param text: the text to search for this balise
     :return: the content of the balise

@@ -29,6 +29,7 @@ class Command:
 def command_loop(message, cmds, bot):
     """
     search commands who match Message and execute it
+
     :param message: the commands to execute (str/uni)
     :param cmds: the commands available
     :param bot: the bot who invoke the command (must expose a reply method, other parameter can be require depending on the function)
@@ -68,6 +69,7 @@ def command_loop(message, cmds, bot):
 def create_transferer(message, bot):
     """
     create a transfer
+
     :param message: commands line (message_parsing.Message)
     :param bot: the bot
     :return:
@@ -101,6 +103,7 @@ def create_transferer(message, bot):
 def help_cmd(cmd, msg_type, pseudo, channel, bot):
     """
     give information about a command
+
     :param cmd: commands to give info
     :param msg_type: the type of Message to send
     :param pseudo: the username to reply
@@ -122,6 +125,7 @@ def help_cmd(cmd, msg_type, pseudo, channel, bot):
 def help_cmds(cmds, msg_type, pseudo, channel, bot):
     """
     list all commands in cmds
+
     :param cmds: commands to be list
     :param msg_type: the type of Message to send
     :param pseudo: the username to reply

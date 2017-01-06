@@ -22,6 +22,7 @@ class Troll(IRC.Bot):
     def init(self):
         """
         init the bot (send i can help you to target)
+
         :return: Nothing what did you expect
         """
         self.reply("I can help you {} :)".format(self.target),"PRIVMSG")
@@ -29,6 +30,7 @@ class Troll(IRC.Bot):
     def main(self):
         """
         main loop of bot , reply to every Message with a quote and send the conversation to main channel
+
         :return: Nothing what did you expect
         """
         message = self.queue.get()
@@ -42,6 +44,7 @@ class Troll(IRC.Bot):
     def get_citation():
         """
         get a random quote
+
         :return: random quote
         """
         r = requests.get("http://www.quotationspage.com/random.php3")

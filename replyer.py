@@ -18,6 +18,7 @@ class Replyer(mythread.Thread):
     def add_sock(self, sock):
         """
         add a new IRC socket to pool
+
         :param sock: the socket to add (IRC sock)
         :return: Nothing what did you expect
         """
@@ -29,6 +30,7 @@ class Replyer(mythread.Thread):
     def main(self):
         """
         main loop, search for the right socket and send Message through it
+
         :return: Nothing what did you expect
         """
         reply = self.queue.get()

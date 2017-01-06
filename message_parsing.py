@@ -26,6 +26,7 @@ class Message:
     def construct_message(self):
         """
         construct a real IRC Message
+
         :return: IRC byte sequence Message
         """
         msg_type = self.msg_type
@@ -39,6 +40,7 @@ class Message:
     def get_time(self):
         """
         time of the Message
+
         :return: the time were Message was created
         """
         return time.strftime("%d/%m/%y %M:%H:%S", self.time)
@@ -84,6 +86,7 @@ class Message:
 def parse(msg):
     """
     parse socket Message to IRC Message
+
     :param msg: the socket Message
     :return: IRC Message
     """

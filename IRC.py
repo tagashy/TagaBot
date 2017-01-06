@@ -24,6 +24,7 @@ class Socket(mythread.Thread):
     def main(self):
         """
         main loop for socket
+
         :return: Nothing what did you expect
         """
         for msg in self.sock.recv(1024).decode('utf-8', errors='replace').split("\r\n"):
@@ -37,6 +38,7 @@ class Socket(mythread.Thread):
     def send(self, message):
         """
         send method of socket
+
         :param message: Message to send
         :return: Nothing what did you expect
         """
@@ -45,6 +47,7 @@ class Socket(mythread.Thread):
     def recv(self, size):
         """
         recv method of socket
+
         :param size: size of data to receive
         :return: data received by sock
         """
@@ -70,6 +73,7 @@ class Bot(mythread.Thread):
     def reply(self, content, msg_type, username=None, target=None, server=None):
         """
         send a Message
+
         :param content: the content of the Message
         :param msg_type: the type of Message
         :param username: the username of the socket
@@ -88,6 +92,7 @@ class Bot(mythread.Thread):
     def update_user_last_seen(self, message=None, pseudo=None, server=None, channel=None):
         """
         update the last time a user has been seen
+
         :param message: the Message received by IRC sock (or stuff who countain at least pseudo, server and target attribute) OVERIDE OTHER PARAMS !!!!!
         :param pseudo: the pseudo of the user
         :param server: the server of the user
@@ -104,6 +109,7 @@ class Bot(mythread.Thread):
     def add_user(self, message=None, pseudo=None, server=None, channel=None):
         """
         add a user to user list
+
         :param message:the Message received by IRC sock (or stuff who countain at least pseudo, server and target attribute) OVERIDE OTHER PARAMS !!!!!
         :param pseudo: the pseudo of the user
         :param server: the server of the user
@@ -117,6 +123,8 @@ class Bot(mythread.Thread):
 
     def deactivate_user(self, pseudo):
         """
+        deactivate a user
+
         :param pseudo: the username of user to deactivate
         :return: Nothing what did you expect
         """
@@ -125,6 +133,7 @@ class Bot(mythread.Thread):
     def main(self):
         """
         main loop to allow callback on specific type of Message
+
         :return: Nothing what did you expect
         """
         message = self.queue.get()
@@ -154,6 +163,7 @@ class Bot(mythread.Thread):
     def user_join(self, message):
         """
         method called when user join channel
+
         :param message: the message received (IRC message object)
         :return:
         """
@@ -162,6 +172,7 @@ class Bot(mythread.Thread):
     def user_privmsg(self, message):
         """
         method called when user send a private message
+
         :param message: the message received (IRC message object)
         :return:
         """
@@ -170,6 +181,7 @@ class Bot(mythread.Thread):
     def user_pubmsg(self, message):
         """
         method called when user send a public message
+
         :param message: the message received (IRC message object)
         :return:
         """
@@ -178,6 +190,7 @@ class Bot(mythread.Thread):
     def user_quit(self, message):
         """
         method called when user quit the server
+
         :param message: the message received (IRC message object)
         :return:
         """
@@ -186,6 +199,7 @@ class Bot(mythread.Thread):
     def user_part(self, message):
         """
         method called when user leave the channel
+
         :param message: the message received (IRC message object)
         :return:
         """
@@ -194,6 +208,7 @@ class Bot(mythread.Thread):
     def user_ban(self, message):
         """
         method called when user has been banned
+
         :param message: the message received (IRC message object)
         :return:
         """
@@ -202,6 +217,7 @@ class Bot(mythread.Thread):
     def user_kick(self, message):
         """
         method called when user has been kicked
+
         :param message: the message received (IRC message object)
         :return:
         """

@@ -22,6 +22,7 @@ class Dispatcher(mythread.Thread):
     def append(self, queue, message_form):
         """
         add of new queue to dispatch a Message
+
         :param queue: queue to store Message if they match message_form
         :param message_form: pattern to match to put the Message to the queue
         :return: Nothing what did you expect
@@ -33,6 +34,7 @@ class Dispatcher(mythread.Thread):
     def main(self):
         """
         Main loop of the boot once it is start
+
         :return: Nothing what did you expect
         """
         message = self.queue.get()
@@ -52,6 +54,7 @@ class Dispatcher(mythread.Thread):
     def remove(self, target):
         """
         remove a queue from elements
+
         :param target: the pattern to remove
         :return: Nothing what did you expect
         """

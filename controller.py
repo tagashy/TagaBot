@@ -26,6 +26,7 @@ class Controller(mythread.Thread):
     def init(self):
         """
         init the controller and start the dispatcher and the replyer
+
         :return: Nothing what did you expect
         """
         self.dispatcher.start()
@@ -34,6 +35,7 @@ class Controller(mythread.Thread):
     def join_channel(self, server, username, channel):
         """
         join a IRC channel, use a existent socket if parameter match, if not create a new socket
+
         :param server: server where channel is located
         :param username: username of the bot
         :param channel: channel to join
@@ -51,6 +53,7 @@ class Controller(mythread.Thread):
     def add_bot(self, pattern, bot, bot_name=None, server=None, channel=None):
         """
         add new bot to resource pool,
+
         :param pattern: pattern to transfer Message to bot
         :param bot: the bot object
         :param bot_name: the bot name (used only if server and channel are not None to join a new channel)
@@ -71,6 +74,7 @@ class Controller(mythread.Thread):
     def add_sock(self, server, username, channel):
         """
         add a new socket to pool of resources
+
         :param server: the server to join
         :param username: the username to use for login into server
         :param channel: the channel to join
@@ -87,6 +91,7 @@ class Controller(mythread.Thread):
     def add_bot_listener(self, pattern, bot):
         """
         add a new listener for the bot passed as parameter
+
         :param pattern: the pattern to match
         :param bot: the who will receive the Message
         :return: Nothing what did you expect
@@ -97,6 +102,7 @@ class Controller(mythread.Thread):
     def end(self):
         """
         kill all other thread then finish
+
         :return: Nothing what did you expect
         """
         for bot in self.bots:
@@ -108,7 +114,9 @@ class Controller(mythread.Thread):
 
     def send_reply(self, username, msg_type, content, target, server):
         """
-        create a Message object and
+        create a Message object and send it
+
+
         :param username: the username of the bot to send Message
         :param msg_type: the Message type
         :param content: the content of the Message

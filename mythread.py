@@ -1,40 +1,44 @@
 #  coding: utf8
 from __future__ import unicode_literals
 
-import threading
 import Queue
+import threading
+
 
 class Thread(threading.Thread):
     """
     override of threading.Thread to offer a stop mechanism, a queue from default a
     """
+
     def __init__(self):
         threading.Thread.__init__(self)
         self.started = False
         self.error = None
         self.pause = False
         self._stop = threading.Event()
-        self.queue=Queue.Queue()
-
+        self.queue = Queue.Queue()
 
     def stop(self):
         """
         tell the thread to stop when he finish his current job
-        :return: Nothing
+
+        :return: Nothing what did you expect
         """
         self._stop.set()
 
     def stopped(self):
         """
         check if the bot has been stopped
-        :return:
+
+        :return: is the bot stopped
         """
         return self._stop.isSet()
 
     def end(self):
         """
         method call when bot end
-        :return:
+
+        :return: Nothing what did you expect
         """
         print ("ENDING")
         exit(0)
@@ -42,14 +46,16 @@ class Thread(threading.Thread):
     def init(self):
         """
         method called before entering main loop, allow to make initialisation of stuff
-        :return:
+
+        :return: Nothing what did you expect
         """
         pass
 
     def run(self):
         """
         main loop of thread,will exec init, then run main in loop until the thread is stopped, then it called end
-        :return:
+
+        :return: Nothing what did you expect
         """
         self.init()
         self.started = True
@@ -60,6 +66,7 @@ class Thread(threading.Thread):
     def main(self):
         """
         main loop
-        :return:
+
+        :return: Nothing what did you expect
         """
         pass

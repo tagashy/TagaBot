@@ -24,7 +24,8 @@ class User:
 
     def update_last_seen(self, server="UNKNOWN", channel="UNKNOWN", admin=False):
         """
-        update the last time a user has been seeb
+        update the last time a user has been seen
+
         :param server: the server where the user has been seen
         :param channel: the channel where the user has been seen
         :param admin: is the user admin of the channel
@@ -45,6 +46,7 @@ class User:
     def info(self):
         """
         retrieve personal information about user
+
         :return: personal information about user (str/unicode)
         """
         return "{} is {} years old, {}'s name is {} and is sexe is {}".format(self.username, self.age, self.username,
@@ -62,6 +64,7 @@ class Users:
     def user_exist(self, pseudo):
         """
         check if a user exist in the list
+
         :param pseudo: name of the user
         :return: True/False
         """
@@ -73,6 +76,7 @@ class Users:
     def add_user(self, user, server="UNKNOWN", channel="UNKNOWN"):
         """
         add user to the list
+
         :param user: either the pseudo or a user object
         :param server: the server where user has been seen
         :param channel: the channel where user has been seen
@@ -107,6 +111,7 @@ class Users:
     def deactivate_user(self, user):
         """
         deactivate user in user list
+
         :param user: either the pseudo or a user object
         :return: 1(success)/0(exist)/-1(error)
         """
@@ -125,6 +130,7 @@ class Users:
     def remove_user(self, user):
         """
         remove user from user list
+
         :param user: either the pseudo or a user object
         :return: 1(success)/0(exist)/-1(error)
         """
@@ -143,6 +149,7 @@ class Users:
     def update_user(self, user, server="UNKNOWN", channel="UNKNOWN", alcolemie=False):
         """
         deactivate user in user list
+
         :param user: either the pseudo or a user object
         :param server: the server where user has been seen
         :param channel: the channel where user has been seen
@@ -176,6 +183,7 @@ class Users:
     def get_user(self, user):
         """
         get user object direct reference (deprecated)
+
         :param user: username (str/unicode)
         :return: user object/-1(error)
         """

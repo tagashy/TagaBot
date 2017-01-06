@@ -18,6 +18,7 @@ class Bot(IRC.Bot):
     def end(self):
         """
         end the bot
+
         :return: Nothing what did you expect
         """
         self.reply("va faire une revision", "QUIT")
@@ -26,6 +27,7 @@ class Bot(IRC.Bot):
     def main(self):
         """
         main loop for the bot
+
         :return: Nothing what did you expect
         """
         message = self.queue.get()
@@ -39,6 +41,7 @@ class Bot(IRC.Bot):
 def commands_init():
     """
     initialisation of the commands supported by the bot
+
     :return: Nothing what did you expect
     """
     cmds = list()

@@ -7,7 +7,7 @@ from utils import send_private_message
 
 class Transferrer(IRC.Bot):
     """
-    Transfer class, it will transfert all message from a channel to another
+    Transfer class, it will transfer all message from a channel to another
     """
 
     def __init__(self, parent, send_sock, original_chan, pseudo=None, couleur=2):
@@ -21,6 +21,7 @@ class Transferrer(IRC.Bot):
     def send_message(self, message):
         """
         send a message (obsolete)
+
         :param message: the content to send
         :return:
         """
@@ -32,6 +33,7 @@ class Transferrer(IRC.Bot):
     def user_join(self, message):
         """
         method called when user join channel
+
         :param message: the message received (IRC message object)
         :return:
         """
@@ -43,6 +45,7 @@ class Transferrer(IRC.Bot):
     def user_privmsg(self, message):
         """
         method called when user send a private message
+
         :param message: the message received (IRC message object)
         :return:
         """
@@ -55,6 +58,7 @@ class Transferrer(IRC.Bot):
     def user_pubmsg(self, message):
         """
         method called when user send a public message
+
         :param message: the message received (IRC message object)
         :return:
         """
@@ -66,6 +70,7 @@ class Transferrer(IRC.Bot):
     def user_quit(self, message):
         """
         method called when user quit the server
+
         :param message: the message received (IRC message object)
         :return:
         """
@@ -77,6 +82,7 @@ class Transferrer(IRC.Bot):
     def user_part(self, message):
         """
         method called when user leave the channel
+
         :param message: the message received (IRC message object)
         :return:
         """
@@ -88,6 +94,7 @@ class Transferrer(IRC.Bot):
     def user_ban(self, message):
         """
         method called when user has been banned
+
         :param message: the message received (IRC message object)
         :return:
         """
@@ -100,6 +107,7 @@ class Transferrer(IRC.Bot):
     def user_kick(self, message):
         """
         method called when user has been kicked
+
         :param message: the message received (IRC message object)
         :return:
         """
