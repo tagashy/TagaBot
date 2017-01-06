@@ -1,3 +1,4 @@
+# coding: utf8
 from __future__ import unicode_literals
 
 import Queue
@@ -11,6 +12,7 @@ class Socket(mythread.Thread):
     IRC socket to grab Message
     it is a wrapper from classical socket to keep IRC connection alive and transfer Message to his dispatcher
     """
+
     def __init__(self, dispatcher, sock, username, server, channel):
         mythread.Thread.__init__(self)
         self.dispatcher = dispatcher
@@ -56,6 +58,7 @@ class Bot(mythread.Thread):
     """
     Base class for IRC bot
     """
+
     def __init__(self, parent, target, username, server):
         mythread.Thread.__init__(self)
         self.queue = Queue.Queue()
@@ -149,22 +152,57 @@ class Bot(mythread.Thread):
             self.user_ban(message)
 
     def user_join(self, message):
+        """
+        method called when user join channel
+        :param message: the message received (IRC message object)
+        :return:
+        """
         pass
 
     def user_privmsg(self, message):
+        """
+        method called when user send a private message
+        :param message: the message received (IRC message object)
+        :return:
+        """
         pass
 
     def user_pubmsg(self, message):
+        """
+        method called when user send a public message
+        :param message: the message received (IRC message object)
+        :return:
+        """
         pass
 
     def user_quit(self, message):
+        """
+        method called when user quit the server
+        :param message: the message received (IRC message object)
+        :return:
+        """
         pass
 
     def user_part(self, message):
+        """
+        method called when user leave the channel
+        :param message: the message received (IRC message object)
+        :return:
+        """
         pass
 
     def user_ban(self, message):
+        """
+        method called when user has been banned
+        :param message: the message received (IRC message object)
+        :return:
+        """
         pass
 
     def user_kick(self, message):
+        """
+        method called when user has been kicked
+        :param message: the message received (IRC message object)
+        :return:
+        """
         pass

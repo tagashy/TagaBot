@@ -1,3 +1,4 @@
+# coding: utf8
 class config:
     bot_name = "JackieETMichelle"
     main_channel = "#root-me-bot"

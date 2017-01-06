@@ -1,3 +1,4 @@
+# coding: utf8
 from __future__ import unicode_literals
 
 import re
@@ -15,11 +16,25 @@ class ConnectionError(Exception):
 
 
 def clean(string):
+    """
+    clean a string from potentially anoying character
+    :param string: the string to remove character
+    :return: the string whithout those caracter character
+    """
     assert isinstance(string, str) or isinstance(string, unicode)
     return string.replace("..", "").replace("/", "").replace("\b", "").replace("\n", "").replace("\r", "")
 
 
 def create_irc_socket(addr, bot_name, channel, users_list, port=6667):
+    """
+    create a socket and authenticate to server
+    :param addr: address of the server to connect to
+    :param bot_name: the name of the user to authenticate with
+    :param channel: the channel to join
+    :param users_list: the list of user to store the user of the channel (must be users object or expose a add_user method with 3 parameter)
+    :param port: the port of the server to connect to (must be cleartext SSL not supported for now)
+    :return: socket (connected to server)
+    """
     name_list_reg = re.compile("(?<= 353 {} = {} :).*".format(bot_name, channel))
     users = []
     recv_sock = socket(AF_INET, SOCK_STREAM)
@@ -53,6 +68,15 @@ def create_irc_socket(addr, bot_name, channel, users_list, port=6667):
 
 
 def print_message(message, msg_type="STDIN", sock=None, pseudo=None, channel=None):
+    """
+    old method to send message on IRC server or STDIN
+    :param message: the content to write
+    :param msg_type: the type of the message (STDIN/PUBMSG/PRIVMSG)
+    :param sock: the socket to send message over
+    :param pseudo: the pseudo to send message (used if message is PRIVMSG)
+    :param channel: the channel to send message (used if message is PUBMSG)
+    :return: Nothing what did you expect
+    """
     if msg_type == "PRIVMSG":
         send_private_message(message, pseudo, sock)
     elif msg_type == "PUBMSG":
@@ -62,10 +86,25 @@ def print_message(message, msg_type="STDIN", sock=None, pseudo=None, channel=Non
 
 
 def send_private_message(message, pseudo, sock):
+    """
+    send a private message to a user/channel
+    :param message: the content to wrtie
+    :param pseudo: the pseudo of the user/channel
+    :param sock: the socket to send message over
+    :return: Nothing what did you expect
+    """
     sock.send("PRIVMSG {} :{}\r\n".format(pseudo, message))
 
 
 def parse_name_list(msg, name_list_reg, channel="UNKNOWN", server="UNKNOWN"):
+    """
+    convert a 351 message (user connected to channel) to a user list
+    :param msg: the message received (str)
+    :param name_list_reg: the regex to use
+    :param channel: the channel of the server
+    :param server: the address of the server
+    :return: users list
+    """
     name_list_res = name_list_reg.search(msg)
     if name_list_res:
         name_list = name_list_res.group(0)
@@ -78,6 +117,12 @@ def parse_name_list(msg, name_list_reg, channel="UNKNOWN", server="UNKNOWN"):
 
 
 def cut_at_cara(string, c):
+    """
+    cut a string at a character and return the content without all character previous to this one
+    :param string: the string to cut
+    :param c: the character to cut at
+    :return: string whitout the part previous to he character
+    """
     index = string.find(c)
     if index != -1:
         return string[index + 1:]
@@ -86,6 +131,11 @@ def cut_at_cara(string, c):
 
 
 def convert_html_to_uni(text):
+    """
+    convert html character to their unicode version
+    :param text: the text to convert
+    :return: the text converted
+    """
     htmlcodes = ['&Aacute;', '&aacute;', '&Agrave;', '&Acirc;', '&agrave;', '&Acirc;', '&acirc;', '&Auml;', '&auml;',
                  '&Atilde;', '&atilde;', '&Aring;', '&aring;', '&Aelig;', '&aelig;', '&Ccedil;', '&ccedil;', '&Eth;',
                  '&eth;', '&Eacute;', '&eacute;', '&Egrave;', '&egrave;', '&Ecirc;', '&ecirc;', '&Euml;', '&euml;',
@@ -111,6 +161,12 @@ def convert_html_to_uni(text):
 
 
 def parse_html_balise(balise, text):
+    """
+    get the text of the html-like balise (XML should also work but not tested)
+    :param balise: the balise to get
+    :param text: the text to search for this balise
+    :return: the content of the balise
+    """
     assert (isinstance(balise, str) or isinstance(balise, unicode)) and (
         isinstance(text, str) or isinstance(text, unicode))
 

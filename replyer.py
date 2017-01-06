@@ -1,3 +1,4 @@
+# coding: utf8
 from __future__ import unicode_literals
 
 import IRC
@@ -7,6 +8,9 @@ from utils import print_message
 
 
 class Replyer(mythread.Thread):
+    """
+    class designed to search for the good socket and then reply with it
+    """
     def __init__(self):
         mythread.Thread.__init__(self)
         self.socks = []
