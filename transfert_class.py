@@ -5,13 +5,15 @@ import random
 
 import IRC
 import message_parsing
+from utils import ConnectionError
+
 
 class Transferrer(IRC.Bot):
     """
     Transfer class, it will transfer all message from a channel to another
     """
 
-    def __init__(self, parent, target, bot_name, server_to_reply, couleur=2):
+    def __init__(self, parent, target, bot_name, server_to_reply, bot_name_replyer, couleur=2):
         """
         initialisation of Transfer class
 
@@ -24,6 +26,7 @@ class Transferrer(IRC.Bot):
         IRC.Bot.__init__(self, parent, target, bot_name, server_to_reply)
         self.couleur = couleur
         self.invisible_cara = u"\u200B"
+        self.bot_name_replyer = bot_name_replyer
 
     def user_join(self, message):
         """
@@ -36,7 +39,7 @@ class Transferrer(IRC.Bot):
         send_res = "User {} has join channel {}".format(message.pseudo[0:1] + self.invisible_cara + message.pseudo[1:],
                                                         message.target)
         # self.send_message(send_res)
-        self.reply(send_res, "PRIVMSG")
+        self.reply(send_res, "PRIVMSG", self.bot_name_replyer)
 
     def user_privmsg(self, message):
         """
@@ -50,7 +53,7 @@ class Transferrer(IRC.Bot):
             message.pseudo[0:1] + self.invisible_cara + message.pseudo[1:],
             message.content)
         # self.send_message(send_res)
-        self.reply(send_res, "PRIVMSG")
+        self.reply(send_res, "PRIVMSG", self.bot_name_replyer)
 
     def user_pubmsg(self, message):
         """
@@ -63,7 +66,7 @@ class Transferrer(IRC.Bot):
         send_res = "{} : {}>{}".format(message.target, message.pseudo[0:1] + self.invisible_cara + message.pseudo[1:],
                                        message.content)
         # self.send_message(send_res)
-        self.reply(send_res, "PRIVMSG")
+        self.reply(send_res, "PRIVMSG", self.bot_name_replyer)
 
     def user_quit(self, message):
         """
@@ -76,7 +79,7 @@ class Transferrer(IRC.Bot):
         send_res = "User {} has quit server with msg : {}".format(
             message.pseudo[0:1] + self.invisible_cara + message.pseudo[1:], message.content)
         # self.send_message(send_res)
-        self.reply(send_res, "PRIVMSG")
+        self.reply(send_res, "PRIVMSG", self.bot_name_replyer)
 
     def user_part(self, message):
         """
@@ -89,7 +92,7 @@ class Transferrer(IRC.Bot):
         send_res = "User {} has quit channel {} with msg : {}".format(
             message.pseudo[0:1] + self.invisible_cara + message.pseudo[1:], message.target, message.content)
         # self.send_message(send_res)
-        self.reply(send_res, "PRIVMSG")
+        self.reply(send_res, "PRIVMSG", self.bot_name_replyer)
 
     def user_ban(self, message):
         """
@@ -103,7 +106,7 @@ class Transferrer(IRC.Bot):
                                                                           message.content[1:], message.target,
                                                                           message.pseudo)
         # self.send_message(send_res)
-        self.reply(send_res, "PRIVMSG")
+        self.reply(send_res, "PRIVMSG", self.bot_name_replyer)
 
     def user_kick(self, message):
         """
@@ -117,7 +120,7 @@ class Transferrer(IRC.Bot):
                                                                           message.content[1:], message.target,
                                                                           message.pseudo)
         # self.send_message(send_res)
-        self.reply(send_res, "PRIVMSG")
+        self.reply(send_res, "PRIVMSG", self.bot_name_replyer)
 
 
 def create_transferer(message, bot):
@@ -155,8 +158,17 @@ def create_transferer(message, bot):
         reg = message_parsing.Message(server=server_addr, target=channel)
         bot_name = "Guest" + str(num_generator.randint(10000, 99999))
         if message.msg_type == "PRIVMSG":
-            tr = Transferrer(bot.parent, bot.target, bot_name, bot.server)
+            tr = Transferrer(bot.parent, message.pseudo, bot_name, bot.server, bot.username)
         else:
-            tr = Transferrer(bot.parent, bot.target, bot_name, bot.server)
-        bot.parent.add_bot(reg, tr, bot_name, server_addr, channel)
-        bot.parent.add_bot_listener(message_parsing.Message(target=bot_name), tr)
+            tr = Transferrer(bot.parent, bot.target, bot_name, bot.server, bot.username)
+        try:
+            bot.parent.add_bot(reg, tr, bot_name, server_addr, channel)
+            bot.parent.add_bot_listener(message_parsing.Message(server=server_addr, target=bot_name), tr)
+        except ConnectionError as e:
+            res = "Transfer cannot be start because of {}".format(e)
+        else:
+            res = "transfert added"
+        if message.msg_type == "PRIVMSG":
+            bot.reply(res, message.msg_type, target=message.pseudo)
+        else:
+            bot.reply(res, message.msg_type, target=message.target)

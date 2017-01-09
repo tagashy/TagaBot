@@ -1,9 +1,6 @@
 # coding: utf8
 from __future__ import unicode_literals
 
-import message_parsing
-import random
-import transfert_class
 from utils import print_message
 
 
@@ -12,6 +9,7 @@ class Command:
     command class
     represent a function pointeur and when to call it
     """
+
     def __init__(self, keyword, function, name, helpable=True, match=False, args=None):
         self.keyword = keyword
         self.function = function
@@ -36,35 +34,33 @@ def command_loop(message, cmds, bot):
     :return: 1(success)/None
     """
     if "!help" == message.content:
-        help_cmds(cmds, message.msg_type, message.pseudo, message.target,bot)
+        help_cmds(cmds, message.msg_type, message.pseudo, message.target, bot)
         print_message("[!] help called by " + message.pseudo)
         return 1
     for cmd in cmds:
         if isinstance(cmd.keyword, str) or isinstance(cmd.keyword, unicode):
-            if message.content == cmd.keyword or message.content + "?" == cmd.keyword:
+            if message.content == cmd.keyword or message.content  == cmd.keyword + "?":
                 if "?" in message:
-                    help_cmd(cmd, message.msg_type, message.pseudo, message.target,bot)
+                    help_cmd(cmd, message.msg_type, message.pseudo, message.target, bot)
                 else:
                     print_message("[!] function " + cmd.name + " called by " + message.pseudo)
                     cmd.function(message, bot)
                 return 1
         else:
             for key in cmd.keyword:
-                if message.content.startswith(key + " ") or message.content == key or message.content + "?" == key:
-                    if "?" in message.content:
-                        help_cmd(cmd, message.msg_type, message.pseudo, message.target,bot)
-                    else:
-                        print_message("[!] function " + cmd.name + " called by " + message.pseudo)
-                        cmd.function(message, bot)
+                if message.content == key + "?" or message.content == key:
+                    help_cmd(cmd, message.msg_type, message.pseudo, message.target, bot)
+                elif message.content.startswith(key + " "):
+                    print_message("[!] function " + cmd.name + " called by " + message.pseudo)
+                    cmd.function(message, bot)
                     return 1
                 elif cmd.match and key in message.content:
                     if "?" in message.content:
-                        help_cmd(cmd, message.msg_type, message.pseudo, message.target,bot)
+                        help_cmd(cmd, message.msg_type, message.pseudo, message.target, bot)
                     else:
                         print_message("[!] function " + cmd.name + " called by " + message.pseudo)
                         cmd.function(message, bot)
                     return 1
-
 
 
 def help_cmd(cmd, msg_type, pseudo, channel, bot):
@@ -86,7 +82,10 @@ def help_cmd(cmd, msg_type, pseudo, channel, bot):
         for arg in cmd.args:
             ret += " <{}|{}>".format(arg[0], arg[1])
     if cmd.help:
-        bot.reply(content=ret, msg_type=msg_type, target=channel, username=pseudo)
+        if msg_type == "PRIVMSG":
+            bot.reply(content=ret, msg_type=msg_type, target=pseudo)
+        else:
+            bot.reply(content=ret, msg_type=msg_type, target=channel)
 
 
 def help_cmds(cmds, msg_type, pseudo, channel, bot):
@@ -109,4 +108,7 @@ def help_cmds(cmds, msg_type, pseudo, channel, bot):
                 for key in cmd.keyword:
                     if "?" not in key:
                         ret += " " + key
-    bot.reply(content=ret, msg_type=msg_type, target=channel, username=pseudo)
+    if msg_type == "PRIVMSG":
+        bot.reply(content=ret, msg_type=msg_type, target=pseudo)
+    else:
+        bot.reply(content=ret, msg_type=msg_type, target=channel)

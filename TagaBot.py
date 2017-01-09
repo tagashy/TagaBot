@@ -31,10 +31,9 @@ class Bot(IRC.Bot):
         :return: Nothing what did you expect
         """
         message = self.queue.get()
-        reply=command_loop(message, self.cmds, self)
+        reply = command_loop(message, self.cmds, self)
         if not reply:
             print_message("[" + message.msg_type + "] USER: " + message.pseudo + " send: " + message.content)
-
 
 
 def commands_init():
