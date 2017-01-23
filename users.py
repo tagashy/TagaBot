@@ -199,3 +199,32 @@ class Users:
         for user in self.__users:
             ret = "{}\r\n{}".format(ret, user)
         return ret
+
+    def __len__(self):
+        return len(self.__users)
+
+    def __getitem__(self, item):
+        if isinstance(item, int):
+            return self.__users[item]
+        elif isinstance(item, str) or isinstance(item, unicode):
+            for user in self.__users:
+                if user.username == item:
+                    return user
+            raise KeyError(item)
+        else:
+            raise TypeError
+
+    def __contains__(self, item):
+        if isinstance(item, User):
+            for user in self.__users:
+                if user == item:
+                    return True
+            return False
+        elif isinstance(item, str) or isinstance(item, unicode):
+            for user in self.__users:
+                if user.name == item:
+                    return True
+            return False
+
+    def __iter__(self):
+        return self.__users.__iter__()

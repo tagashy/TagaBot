@@ -39,7 +39,7 @@ def command_loop(message, cmds, bot):
         return 1
     for cmd in cmds:
         if isinstance(cmd.keyword, str) or isinstance(cmd.keyword, unicode):
-            if message.content == cmd.keyword or message.content  == cmd.keyword + "?":
+            if message.content == cmd.keyword or message.content == cmd.keyword + "?":
                 if "?" in message:
                     help_cmd(cmd, message.msg_type, message.pseudo, message.target, bot)
                 else:
@@ -112,3 +112,40 @@ def help_cmds(cmds, msg_type, pseudo, channel, bot):
         bot.reply(content=ret, msg_type=msg_type, target=pseudo)
     else:
         bot.reply(content=ret, msg_type=msg_type, target=channel)
+
+
+def speak(message, bot):
+    param = message.content.split(" ", 2)
+    if len(param) != 3:
+        bot.reply("!speak <target|required> <content>")
+    else:
+        if not param[1].startswith("#") or message.pseudo == "Tagashy":
+            bot.reply(param[2], "PRIVMSG", target=param[1])
+
+
+def h2s(message, bot):
+    param = message.content.split(" ", 1)
+    str_to_translate = param[1]
+    if len(param) == 2:
+        if str_to_translate.startswith("0x"):
+            str_to_translate = str_to_translate[2:]
+        ret = ("".join(x for x in str_to_translate if (x.isdigit() or x.lower() in ["a", "b", "c", "d", "e"])))
+        if len(ret) % 2 == 0 or len(ret) == 0:
+            if ret != str_to_translate:
+                msg = "WARNING some character have been removed from the initial string the one used is '{}'".format(
+                    ret)
+                if message.msg_type == "PUBMSG":
+                    bot.reply(msg, "PUBMSG")
+                elif message.msg_type == "PRIVMSG":
+                    bot.reply(msg, "PRIVMSG", message.pseudo)
+            ret = ret.decode("hex")
+            ret = ret.decode("utf-8", errors="replace")
+            ret = "STR='" + ret+"'"
+        else:
+            ret = "UNVALID STRING"
+    else:
+        ret = "!h2s <hexstring/required>"
+    if message.msg_type == "PUBMSG":
+        bot.reply(ret, "PUBMSG")
+    elif message.msg_type == "PRIVMSG":
+        bot.reply(ret, "PRIVMSG", message.pseudo)

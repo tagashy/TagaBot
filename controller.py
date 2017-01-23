@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import IRC
 import dispatcher
+import learning
 import message_parsing
 import mythread
 import replyer
@@ -22,6 +23,7 @@ class Controller(mythread.Thread):
         self.replyer = replyer.Replyer()
         self.socks = []
         self.bots = []
+        self.kb = learning.KnowledgeBase()
 
     def init(self):
         """
@@ -47,6 +49,8 @@ class Controller(mythread.Thread):
                     return sock
                 sock.send("JOIN {}\r\n".format(channel))
                 print ("[!] channel {} joined on {} with username {}".format(channel, server, username))
+                sock = IRC.Socket(self.dispatcher, sock.sock, username, server, channel)
+                self.replyer.add_sock(sock)
                 return sock
         return self.add_sock(server=server, username=username, channel=channel)
 

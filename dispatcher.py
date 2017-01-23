@@ -59,7 +59,12 @@ class Dispatcher(mythread.Thread):
         :param target: the pattern to remove
         :return: Nothing what did you expect
         """
-        for el in self.elems:
-            if target == el[0]:
-                self.elems.remove(el)
-                break
+        if isinstance(target , message_parsing.Message):
+            for el in self.elems:
+                if target == el[0]:
+                    self.elems.remove(el)
+                    break
+        else:
+            for el in self.elems:
+                if target == el[1]:
+                    self.elems.remove(el)

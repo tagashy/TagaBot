@@ -49,6 +49,9 @@ def create_irc_socket(addr, bot_name, channel, users_list, port=6667):
     try:
         while 1:
             res = recv_sock.recv(1024).decode('utf-8', errors='replace')
+            if res.startswith("PING"):
+                recv_sock.send(res.replace("PING", "PONG")+"\r\n")
+            print res
             if "[Throttled]" in res:
                 raise ConnectionError("Throttled")
             elif "[Registration timeout]" in res:
@@ -57,15 +60,18 @@ def create_irc_socket(addr, bot_name, channel, users_list, port=6667):
                 raise ConnectionError("Closing Link")
     except timeout:
         recv_sock.send("JOIN {} \r\n".format(channel))
-        recv_sock.settimeout(None)
         print_message("[!] join {}".format(channel))
-    while " 366 " not in res:
-        res = recv_sock.recv(1024).decode('utf-8', errors='replace')
-        if " 353 " in res:
-            print_message("[!] creation of user list")
-            users += parse_name_list(res, name_list_reg, channel, "{}:{}".format(addr, port))
-            for user in users:
-                users_list.add_user(user, "{}:{}".format(addr, port), channel)
+    try:
+        while " 366 " not in res:
+            res = recv_sock.recv(1024).decode('utf-8', errors='replace')
+            if " 353 " in res:
+                print_message("[!] creation of user list")
+                users += parse_name_list(res, name_list_reg, channel, "{}:{}".format(addr, port))
+                for user in users:
+                    users_list.add_user(user, "{}:{}".format(addr, port), channel)
+    except timeout:
+        pass
+    recv_sock.settimeout(None)
     return recv_sock
 
 

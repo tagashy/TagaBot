@@ -222,3 +222,7 @@ class Bot(mythread.Thread):
         :return:
         """
         pass
+
+    def end(self):
+        self.parent.bots.remove(self)
+        self.parent.dispatcher.remove(self)

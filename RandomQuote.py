@@ -7,6 +7,7 @@ import time
 import requests
 
 import IRC
+import message_parsing
 import utils
 
 
@@ -14,6 +15,7 @@ class Troll(IRC.Bot):
     """
     Troll class who respond with random quote
     """
+
     def __init__(self, parent, username, Target, server, channel_to_reply):
         IRC.Bot.__init__(self, parent, Target, username, server)
         self.queue = Queue.Queue()
@@ -25,7 +27,7 @@ class Troll(IRC.Bot):
 
         :return: Nothing what did you expect
         """
-        self.reply("I can help you {} :)".format(self.target),"PRIVMSG")
+        self.reply("I can help you {} :)".format(self.target), "PRIVMSG")
 
     def main(self):
         """
@@ -35,10 +37,10 @@ class Troll(IRC.Bot):
         """
         message = self.queue.get()
         res = self.get_citation()
-        self.reply("{}=>{}".format(message.pseudo, message.content),"PUBMSG", target=self.channel_to_reply)
-        self.reply("{}<={}".format(message.pseudo, res),"PUBMSG", target=self.channel_to_reply)
+        self.reply("{}=>{}".format(message.pseudo, message.content), "PUBMSG", target=self.channel_to_reply)
         time.sleep(0.1 * len(res))
-        self.reply(res,"PRIVMSG")
+        self.reply("{}<={}".format(message.pseudo, res), "PUBMSG", target=self.channel_to_reply)
+        self.reply(res, "PRIVMSG")
 
     @staticmethod
     def get_citation():
@@ -49,3 +51,24 @@ class Troll(IRC.Bot):
         """
         r = requests.get("http://www.quotationspage.com/random.php3")
         return utils.parse_html_balise("a", utils.parse_html_balise("dt", r.text))
+
+
+def create_troll(message, bot):
+    param = message.content.split()
+    if message.pseudo.startswith("soufedj"):
+        return
+    if len(param) != 2:
+        if message.msg_type == "PRIVMSG":
+            bot.reply("!troll <pseudo|required>", "PRIVMSG", target=message.pseudo)
+        else:
+            bot.reply("!troll <pseudo|required>", "PUBMSG")
+    else:
+        if param[1].lower() not in {"hackira", "arod", "dazax", "dvor4x", "notfound", "sambecks", "thanat0s", "gelu",
+                                    "geluchat", bot.username, "#root-me"}:
+            troll = Troll(bot.parent, bot.username, param[1], bot.server, bot.target)
+            reg = message_parsing.Message(pseudo=param[1], msg_type="PRIVMSG")
+            bot.parent.add_bot(reg, troll, bot.username, bot.server, bot.target)
+            if message.msg_type == "PRIVMSG":
+                bot.reply("trolling {} :P".format(param[1]), "PRIVMSG", target=message.pseudo)
+            else:
+                bot.reply("trolling {} :P".format(param[1]), "PUBMSG")

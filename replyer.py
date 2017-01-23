@@ -46,6 +46,6 @@ class Replyer(mythread.Thread):
                         elif reply.target == sock.channel:
                             sock.send(reply.construct_message())
                             return
-            print "NO MATCH !!!"
+            print ("NO MATCH for {}!!!\nSock available:\n".format(reply))
             for sock in self.socks:
-                print sock
+                print (sock)
