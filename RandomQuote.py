@@ -55,7 +55,7 @@ class Troll(IRC.Bot):
 
 def create_troll(message, bot):
     param = message.content.split()
-    if message.pseudo.startswith("soufedj"):
+    if message.pseudo not in ["Tagashy", "ghozt"]:
         return
     if len(param) != 2:
         if message.msg_type == "PRIVMSG":
