@@ -115,6 +115,8 @@ def help_cmds(cmds, msg_type, pseudo, channel, bot):
 
 
 def speak(message, bot):
+    if message.pseudo not in ["Tagashy", "ghozt"]:
+        return
     param = message.content.split(" ", 2)
     if len(param) != 3:
         bot.reply("!speak <target|required> <content>")
