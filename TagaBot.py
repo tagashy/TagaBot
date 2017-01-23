@@ -47,10 +47,10 @@ def commands_init():
     cmds = list()
     cmds.append(Command(["!transfert"], transfert_class.create_transferer, "TRANSFERT",
                         args=[("server", "require"), ("#channel", "require"), ("public/publique", "optional")]))
-    cmds.append(Command(["!learn"], learning.create_learner, "LEARNER",
-                        args=[("#channel", "require"), ("server", "optional"), ("name", "optional")]))
-    cmds.append(Command(["!helper"], learning.create_helper, "HELPER",
-                        args=[("target(#channel/username)", "require"), ("server", "optional"), ("name", "optional")]))
+    #cmds.append(Command(["!learn"], learning.create_learner, "LEARNER",
+    #                    args=[("#channel", "require"), ("server", "optional"), ("name", "optional")]))
+    #cmds.append(Command(["!helper"], learning.create_helper, "HELPER",
+    #                    args=[("target(#channel/username)", "require"), ("server", "optional"), ("name", "optional")]))
     cmds.append(Command(["!quotes"], RandomQuote.create_troll, "RANDOM QUOTE", args=[("target", "require")]))
     cmds.append(Command(["!speak"], action.speak, "SPEAK", args=[("target", "require"),("content","require")]))
     cmds.append(Command(["!h2s"], action.h2s, "HEX2STRING", args=[("hexstring", "require")]))
