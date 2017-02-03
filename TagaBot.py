@@ -54,5 +54,7 @@ def commands_init():
     cmds.append(Command(["!quotes"], RandomQuote.create_troll, "RANDOM QUOTE", args=[("target", "require")]))
     cmds.append(Command(["!speak"], action.speak, "SPEAK", args=[("target", "require"),("content","require")]))
     cmds.append(Command(["!h2s"], action.h2s, "HEX2STRING", args=[("hexstring", "require")]))
+    cmds.append(Command(["!h2us"], action.h2us, "HEX2STRING", args=[("hexstring", "require")]))
+    cmds.append(Command(["!s2h"], action.s2h, "STRING2HEX", args=[("string", "require")]))
 
     return cmds

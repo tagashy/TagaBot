@@ -126,13 +126,13 @@ def speak(message, bot):
 
 
 def h2s(message, bot):
-    param = message.content.split(" ", 1)
-    str_to_translate = param[1]
-    if len(param) == 2:
-        if str_to_translate.startswith("0x"):
-            str_to_translate = str_to_translate[2:]
-        ret = ("".join(x for x in str_to_translate if (x.isdigit() or x.lower() in ["a", "b", "c", "d", "e"])))
-        if len(ret) % 2 == 0 or len(ret) == 0:
+    try:
+        param = message.content.split(" ", 1)
+        str_to_translate = param[1]
+        if len(param) == 2:
+            if str_to_translate.startswith("0x"):
+                str_to_translate = str_to_translate[2:]
+            ret = ("".join(x for x in str_to_translate if (x.isdigit() or x.lower() in ["a", "b", "c", "d", "e", "f"])))
             if ret != str_to_translate:
                 msg = "WARNING some character have been removed from the initial string the one used is '{}'".format(
                     ret)
@@ -142,11 +142,59 @@ def h2s(message, bot):
                     bot.reply(msg, "PRIVMSG", message.pseudo)
             ret = ret.decode("hex")
             ret = ret.decode("utf-8", errors="replace")
-            ret = "STR='" + ret+"'"
+            ret = "STR='" + ret + "'"
         else:
-            ret = "UNVALID STRING"
+            ret = "!h2s <hexstring/required>"
+    except Exception as e:
+        ret = str(e)
+    if message.msg_type == "PUBMSG":
+        bot.reply(ret, "PUBMSG")
+    elif message.msg_type == "PRIVMSG":
+        bot.reply(ret, "PRIVMSG", message.pseudo)
+
+
+def h2us(message, bot):
+    ret=""
+    try:
+        param = message.content.split(" ", 1)
+        str_to_translate = param[1]
+        if len(param) == 2:
+            if str_to_translate.startswith("0x"):
+                str_to_translate = str_to_translate[2:]
+            msg = ("".join(x for x in str_to_translate if (x.isdigit() or x.lower() in ["a", "b", "c", "d", "e", "f"])))
+            if msg != str_to_translate:
+                msg = "WARNING some character have been removed from the initial string the one used is '{}'".format(
+                    msg)
+                if message.msg_type == "PUBMSG":
+                    bot.reply(msg, "PUBMSG")
+                elif message.msg_type == "PRIVMSG":
+                    bot.reply(msg, "PRIVMSG", message.pseudo)
+            print len(msg)
+            for i in range(0,len(msg)-1,4):
+                print i
+                cara=int(msg[i:i+4],16)
+                ret+=unichr(cara)
+            #ret=ret.encode("utf-8")
+            ret = "STR='" + ret + "'"
+        else:
+            ret = "!h2s <hexstring/required>"
+    except Exception as e:
+        ret = str(e)
+    if message.msg_type == "PUBMSG":
+        bot.reply(ret, "PUBMSG")
+    elif message.msg_type == "PRIVMSG":
+        bot.reply(ret, "PRIVMSG", message.pseudo)
+
+
+def s2h(message, bot):
+    param = message.content.split(" ", 1)
+    str_to_translate = param[1]
+    if len(param) == 2:
+        # str_to_translate=str_to_translate.decode("utf-8", errors="replace")
+        ret = "".join([hex(ord(c))[2:].zfill(2) for c in str_to_translate])
+        ret = "HEX='" + ret + "'"
     else:
-        ret = "!h2s <hexstring/required>"
+        ret = "!s2h <string/required>"
     if message.msg_type == "PUBMSG":
         bot.reply(ret, "PUBMSG")
     elif message.msg_type == "PRIVMSG":
